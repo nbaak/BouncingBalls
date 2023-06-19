@@ -1,4 +1,5 @@
 from colors import generate_random_color
+import config
 
 
 class Ball:
@@ -9,7 +10,7 @@ class Ball:
         self.radius = radius
         self.color = generate_random_color()
         self.weight = radius ** 2
-        self.friction = 0.02  # Adjust the friction factor as needed
+        self.friction = config.FRICTION
 
     def move(self, gravity_enabled=True):
         if gravity_enabled:
