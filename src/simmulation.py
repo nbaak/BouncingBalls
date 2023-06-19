@@ -47,7 +47,7 @@ def main():
         radius = randint(20, 50)
         balls.append(Ball(pos, speed, radius))
 
-    gravity_enabled = True
+    gravity_enabled = config.GRAVITY
 
     while True:
         for event in pygame.event.get():
