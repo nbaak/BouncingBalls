@@ -75,6 +75,12 @@ def main():
                     take_screenshot()
                 elif event.key == K_q:
                     exit()
+            elif event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    pos = list(pygame.mouse.get_pos())
+                    speed = [randint(-5, 5), randint(-5, 5)]
+                    radius = randint(20, 50)
+                    balls.append(Ball(pos, speed, radius))
 
         # Clear the screen
         screen.fill(colors.WHITE)
