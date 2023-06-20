@@ -23,11 +23,14 @@ class Ball:
         self.pos[0] += self.speed[0]
         self.pos[1] += self.speed[1]
 
-    def check_collision(self, other_ball):
+    def check_collision(self, other_ball) -> bool:
         distance = ((self.pos[0] - other_ball.pos[0]) ** 2 +
                     (self.pos[1] - other_ball.pos[1]) ** 2) ** 0.5
         if distance <= self.radius + other_ball.radius:
             self.resolve_collision(other_ball)
+            return True
+        
+        return False
 
     def resolve_collision(self, other_ball):
         direction = [other_ball.pos[0] - self.pos[0], other_ball.pos[1] - self.pos[1]]
@@ -60,17 +63,27 @@ class Ball:
         other_ball.pos[0] += separation * direction[0] / distance
         other_ball.pos[1] += separation * direction[1] / distance
 
-    def handle_boundary_collision(self, window_width, window_height):
+    def handle_boundary_collision(self, window_width, window_height) -> bool:
+        collision = False
+        
         if self.pos[0] - self.radius < 0:
             self.pos[0] = self.radius
             self.speed[0] = abs(self.speed[0])
+            collision = True
+            
         elif self.pos[0] + self.radius > window_width:
             self.pos[0] = window_width - self.radius
             self.speed[0] = -abs(self.speed[0])
+            collision = True
 
         if self.pos[1] - self.radius < 0:
             self.pos[1] = self.radius
             self.speed[1] = abs(self.speed[1])
+            collision = True
+            
         elif self.pos[1] + self.radius > window_height:
             self.pos[1] = window_height - self.radius
             self.speed[1] = -abs(self.speed[1])
+            collision = True
+            
+        return collision

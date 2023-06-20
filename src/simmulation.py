@@ -18,6 +18,14 @@ window_size = (window_width, window_height)
 screen = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Bouncing Balls")
 
+# Audio Stuff
+pygame.mixer.init()
+WALL_COLLISION_SOUND = pygame.mixer.Sound('wall_collision.mp3')
+WALL_COLLISION_SOUND.set_volume(.1)
+
+BALL_COLLISION_SOUND = pygame.mixer.Sound('mixkit-cartoon-giggle-743.wav')
+BALL_COLLISION_SOUND.set_volume(.6)
+
 # Set up the clock
 clock = pygame.time.Clock()
 
@@ -47,7 +55,8 @@ def main():
         radius = randint(20, 50)
         balls.append(Ball(pos, speed, radius))
 
-    gravity_enabled = True
+    gravity_enabled = config.GRAVITY
+    sounds_active = config.SOUNDS
 
     while True:
         for event in pygame.event.get():
@@ -56,6 +65,8 @@ def main():
             elif event.type == KEYDOWN:
                 if event.key == K_g:
                     gravity_enabled = not gravity_enabled
+                elif event.key == K_m:
+                    sounds_active = not sounds_active
                 elif event.key == K_r:
                     balls = []
                     for _ in range(config.NUMBER_OF_BALLS):
@@ -88,10 +99,15 @@ def main():
         # Update and draw the balls
         for ball in balls:
             ball.move(gravity_enabled=gravity_enabled)
-            ball.handle_boundary_collision(window_width, window_height)
+            wall_collision = ball.handle_boundary_collision(window_width, window_height)
+            if wall_collision and sounds_active:
+                WALL_COLLISION_SOUND.play()
+
             for other_ball in balls:
                 if other_ball != ball:
-                    ball.check_collision(other_ball)
+                    ball_collision = ball.check_collision(other_ball)
+                    if ball_collision and sounds_active:
+                        BALL_COLLISION_SOUND.play()
 
             pygame.draw.circle(screen, ball.color, [int(ball.pos[0]), int(ball.pos[1])], ball.radius)
 
