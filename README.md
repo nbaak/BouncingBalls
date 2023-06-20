@@ -39,6 +39,7 @@ This is a simulation program that simulates the motion and collision of balls wi
     D: Remove Ball
     R: Reset
     G: Gravity on/off
+    M: Sounds on/off
     S: Capture a screenshot of the current simulation and save it as a PNG file.
     Q: Quit the application.
 
